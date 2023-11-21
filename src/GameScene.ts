@@ -6,23 +6,23 @@ interface GameScene {
 };
 
 
-class GameScene1 implements GameScene {
+export class GameScene1 implements GameScene {
     init(): void {
-
+        console.log("GameScene1のinit()");
     }
 
-    update(): void {
-
+    update(duration: number): void {
+        console.log("GameScene1のupdate()");
     }
 }
 
 
-class GameScene2 implements GameScene {
+export class GameScene2 implements GameScene {
     init(): void {
-
+        console.log("GameScene2のinit()");
     }
 
-    update(): void {
-
+    update(duration: number): void {
+        console.log("GameScene2のupdate()");
     }
 }

@@ -7,6 +7,17 @@ import useLogger from './logger';
 import type { Matrix4 } from 'three';
 import type { ArMarkerControls } from '@ar-js-org/ar.js-threejs/types/ArMarkerControls';
 
+import { TestMain } from './TestMain';
+import { GameScene1 } from './GameScene';
+
+const testmain = new TestMain();
+testmain.test();
+
+testmain.update();
+
+testmain.changeScene(new GameScene1());
+testmain.update();
+
 const log = useLogger();
 const video_canvas = "threejs"
 
@@ -20,14 +31,14 @@ class AREventHandler implements AREngineDelegate {
   }
 }
 
-const ar_engine = useAREngine(); //WebARクラスの唯一のインスタンスを取得
-ar_engine.delegate = new AREventHandler();
+// const ar_engine = useAREngine(); //WebARクラスの唯一のインスタンスを取得
+// ar_engine.delegate = new AREventHandler();
 
-//本モジュールが表示可能な状態になった直後に実行される
-onMounted(() => {
-  //webarの初期化
-  ar_engine.start(video_canvas);
-})
+// //本モジュールが表示可能な状態になった直後に実行される
+// onMounted(() => {
+//   //webarの初期化
+//   ar_engine.start(video_canvas);
+// })
 
 
 </script>
