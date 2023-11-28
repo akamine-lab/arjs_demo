@@ -26,6 +26,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+.vscode
 
 deploy.sh
 cert.pem
