@@ -13,6 +13,7 @@
   "dependencies": {
     "@ar-js-org/ar.js-threejs": "github:AR-js-org/AR.js-threejs",
     "axios": "^1.6.1",
+    "opencv-ts": "^1.3.6",
     "three": "^0.158.0",
     "vue": "^3.3.4",
     "vue-logger-plugin": "^2.2.3"
