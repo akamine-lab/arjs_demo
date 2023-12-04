@@ -22,14 +22,14 @@ const model2 = () => {
     scene.model2();
 }
 
-const back = () => {
+const goto_timer = () => {
     scene.back();
 }
 </script>
 
 <template>
-    <h1>3DモデルをUIにより動的に変更するシーン</h1>
-    <button @click="back">back</button>
+    <h1>3DモデルをUIにより動的に変更するシーン(ARモードの場合、マーカーが必要)</h1>
+    <button @click="goto_timer">go to timer scene</button>
     <button @click="model1">model1</button>
     <button @click="model2">model2</button>
 </template>./AREngine

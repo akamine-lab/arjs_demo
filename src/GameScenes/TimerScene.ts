@@ -1,5 +1,6 @@
 import { type GameScene } from '@/GameEngine'
 import { Change3DScene } from './Change3DScene'
+import { OpenCVScene } from './OpenCVScene'
 
 export class TimerScene implements GameScene {
     sceneTime: number = 0;
@@ -10,7 +11,7 @@ export class TimerScene implements GameScene {
     }
     update(duration_sec: number) {
         if (this.remainingTime() <= 0) {
-            return new Change3DScene();
+            return new OpenCVScene();
         }
         this.sceneTime += duration_sec;
         this.onTimerUpdated?.();

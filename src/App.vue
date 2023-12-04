@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { onErrorCaptured, onMounted, reactive, ref, type Component } from 'vue';
+import { onErrorCaptured, onMounted, ref, type Component } from 'vue';
 import { useAREngine, type AREngineDelegate } from "./AREngine";
 
-import useLogger from './logger';
-import type { Matrix4, Renderer } from 'three';
 import type { ArMarkerControls } from '@ar-js-org/ar.js-threejs/types/ArMarkerControls';
-import { type GameScene, type GameEngineDelegate, EmptyScene, useGameEngine } from './GameEngine';
+import type { Renderer } from 'three';
+import { EmptyScene, useGameEngine, type GameEngineDelegate, type GameScene } from './GameEngine';
+import useLogger from './logger';
 
-import Timer from './components/Timer.vue';
+import { useCvEngine, type CvEngineDelegate } from './CvEngine';
 import Change3DScene from './components/Change3DScene.vue';
+import Timer from './components/Timer.vue';
+import OpenCVScene from './components/OpenCVScene.vue';
+
 
 const log = useLogger();//ブラウザ上に表示するカスタムロガー
 const video_canvas = "threejs" //ビデオ画像を表示するDOM
@@ -22,7 +25,8 @@ interface ComponentDict {
 //シーン名とvueコンポーネントを対応付ける辞書
 const components_dict: ComponentDict = {
   "Timer": Timer,
-  "Change3DScene": Change3DScene
+  "Change3DScene": Change3DScene,
+  "OpenCVScene": OpenCVScene
 }
 
 onErrorCaptured((err, instance, info) => {
@@ -42,6 +46,15 @@ class GameEventHandler implements GameEngineDelegate {
 const game_engine = useGameEngine(); // 唯一のゲームエンジンインスタンスを取得
 game_engine.delegate = new GameEventHandler();
 
+const cv_engine = useCvEngine();
+class CvEngineHandler implements CvEngineDelegate {
+  onInitialized(): void {
+    console.log("opencv intialized");
+  }
+};
+
+cv_engine.delegate = new CvEngineHandler();
+
 class AREventHandler implements AREngineDelegate {
   onMarkerFound(marker: ArMarkerControls): void {
     //マーカーが見つかった時の処理
@@ -49,9 +62,8 @@ class AREventHandler implements AREngineDelegate {
   onFrameCaptured(video_element: HTMLVideoElement): void {
     //ビデオフレームが更新された時に呼び出される
 
-    // var canvas = document.getElementById("test_canvas") as HTMLCanvasElement;
-    // var context = canvas!.getContext('2d');
-    // context!.drawImage(video_element, 0, 0, canvas.width, canvas.height);
+    //ここでarjsがキャプチャするビデオをopencv_enineに渡す
+    cv_engine.processsVideoFrame(video_element);
   }
   onRender(renderer: Renderer, duration_sec: number): void {
     game_engine.update(duration_sec);
@@ -64,10 +76,12 @@ ar_engine.delegate = new AREventHandler();
 
 //本モジュールが表示可能な状態になった直後に実行される
 onMounted(() => {
+  //opencvの初期化
   //webarの初期化
   ar_engine.setupRenderer(video_canvas);
-  //ar_engine.startAR(); //ここをコメントアウトすると非ARで起動する
+  ar_engine.startAR(); //ここをコメントアウトすると非ARで起動する
   game_engine.init();
+  cv_engine.init();
 })
 
 </script>
@@ -100,3 +114,4 @@ main {
   margin: 0 auto 2rem;
 }
 </style>
+./CvEngine
