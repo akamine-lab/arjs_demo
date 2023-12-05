@@ -79,17 +79,21 @@ export class CvEngine {
 
         //実行頻度を下げる(rate_limitter)
         rate_limiter.execute(() => {
+            /* VideoElementから直接画像を得ることはできないので、
+               VideoElement -> Canvas にコピーする。
+               その後、各種ハンドラに処理を引き継ぐ
+            */
             let canvas = this.inputCanvas;
             let context = canvas.getContext('2d');
             if (context) {
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                let img = cv.imread(canvas);
+                context.drawImage(video, 0, 0, canvas.width, canvas.height); //コピー
+                let img = cv.imread(canvas); //canvasの画像からopencvのMatを作る
 
                 if (this.delegate?.preprocessFrame) {
                     img = this.delegate?.preprocessFrame?.(img);
                 }
 
-                this.userProcessor?.(img);
+                this.userProcessor?.(img); //ユーザのハンドラを呼び出す
                 img.delete();
             } else {
                 console.log("error on canvas.getContext('2d') in CvEngine.processsVideoFrame");

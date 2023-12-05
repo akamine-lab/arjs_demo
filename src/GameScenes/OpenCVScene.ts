@@ -22,7 +22,7 @@ export class OpenCVScene implements GameScene {
     nextScene: GameScene | null = null;
 
     init(): void {
-        this.useEdgeFilter();
+        this.useEdgeFilter(); //エッジフィルタモードに設定
     }
 
     useEdgeFilter() {
@@ -38,6 +38,7 @@ export class OpenCVScene implements GameScene {
     }
 
     edgeDetect(img: Mat) {
+
         let resized = new cv.Mat();
         cv.resize(img, resized, new cv.Size(640, 480));
 

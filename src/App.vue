@@ -46,7 +46,7 @@ class GameEventHandler implements GameEngineDelegate {
 const game_engine = useGameEngine(); // 唯一のゲームエンジンインスタンスを取得
 game_engine.delegate = new GameEventHandler();
 
-const cv_engine = useCvEngine();
+const cv_engine = useCvEngine(); //唯一のopencvエンジンインスタンスを取得
 class CvEngineHandler implements CvEngineDelegate {
   onInitialized(): void {
     console.log("opencv intialized");
